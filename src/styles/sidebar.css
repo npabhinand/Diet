@@ -1,0 +1,12 @@
+.nav-item:hover {
+  background-color: #007bff; /* your hover color */
+  color: #fff; /* text color on hover */
+}
+.card-with-border {
+  border: 2px solid #007bff;/* your border color */
+}
+
+.nav-item.active {
+  background-color: black; /* Set your desired background color for the active state */
+  color: white; /* Set your desired text color for the active state */
+}
