@@ -31,9 +31,9 @@ export default function Navbar1() {
             <Nav.Link  href="/login">
              Login
             </Nav.Link>
-            <Nav.Link  href="/login">
+            {/* <Nav.Link  href="/login">
              Expert
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link  href="/signup">
              Sign Up
             </Nav.Link>

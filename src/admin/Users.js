@@ -8,7 +8,7 @@ export default function Users() {
 
   useEffect(() => {
     const getUserData = async () => {
-      const q = query(collection(db, "users"), where("role", "==", "user"));
+      const q = query(collection(db, "users"));
       const querySnapshot = await getDocs(q);
       const userData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setUsers(userData);
@@ -23,10 +23,10 @@ export default function Users() {
         <thead class="bg-light">
           <tr>
             <th>Name</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Position</th>
-            <th>Actions</th>
+            <th>Role</th>
+            <th>Phone</th>
+            {/* <th>BMI</th> */}
+            {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -47,18 +47,18 @@ export default function Users() {
                 </div>
               </td>
               <td>
-                <p class="fw-normal mb-1">{user.title}</p>
-                <p class="text-muted mb-0">{user.department}</p>
+                <p class="fw-normal mb-1">{user.role}</p>
+                {/* <p class="text-muted mb-0">{user.department}</p> */}
               </td>
               <td>
-                <span class="badge badge-success rounded-pill d-inline">Active</span>
+              <td>{user.phone}</td>
               </td>
-              <td>{user.position}</td>
+              {/* <td> {user.BMI}</td>
               <td>
                 <button type="button" class="btn btn-link btn-sm btn-rounded">
-                  Edit
+                 
                 </button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

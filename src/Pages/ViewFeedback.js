@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row,Col } from 'react-bootstrap'
-// import { doc, setDoc } from "firebase/firestore";
+
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import UserNav from "../components/UserNav";
@@ -21,7 +21,7 @@ function ViewFeedback() {
   }, []);
 
   return (
-   <div style={{backgroundColor:"#F1F1F1",width:"100%",height:'100%'}}>
+   <div style={{backgroundColor:"#F1F1F1",width:1500,height:2000}}>
    <UserNav/>
     <div style={{marginTop:70,marginLeft:50}}>
       <Row>
@@ -31,10 +31,10 @@ function ViewFeedback() {
         <h3> {feedback.userName}</h3>
         <p>{feedback.feedback}</p>
         <div style={{textAlign:'center'}}>
-        <Button
+        {/* <Button
               variant="primary"
               // style={{ width: 300 }}
-              >Reply</Button>
+              >Reply</Button> */}
         </div>
       </Card>
       </Col>

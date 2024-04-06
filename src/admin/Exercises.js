@@ -8,7 +8,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { doc, setDoc } from "firebase/firestore";
-import { collection, query, getDocs } from "firebase/firestore";
+import { collection, onSnapshot} from "firebase/firestore";
 import { db } from "../firebase";
 // import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -43,18 +43,19 @@ export default function Exercises() {
     });
     // navigate("/")
   };
+  
+
   useEffect(() => {
-    const getExerciseData = async () => {
-      const q = query(collection(db, "exercise"));
-      const querySnapshot = await getDocs(q);
-      const userData = querySnapshot.docs.map((doc) => ({
+    const unsubscribe = onSnapshot(collection(db, "exercise"), (snapshot) => {
+      const userData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setExercises(userData);
-    };
+    });
 
-    getExerciseData();
+    // Unsubscribe from snapshot listener when component unmounts
+    return () => unsubscribe();
   }, []);
 
   

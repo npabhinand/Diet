@@ -113,7 +113,7 @@ export default function Admin() {
             style={{ marginLeft: 20, textDecoration: "none" }}
           >
             <i className="bi bi-box-arrow-left"></i>
-            <Image className="vh-10" src="./logout-50.png" />
+            <Image className="vh-10" src="./logout-50.png" style={{width:35}} />
             <span className="mt-3 ms-2">Logout</span>
           </a>
         </div>

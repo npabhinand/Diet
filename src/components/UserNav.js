@@ -1,4 +1,4 @@
-import React, { useContext,useState,useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
@@ -7,23 +7,28 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { AuthContext } from "../context/auth_context";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 function UserNav() {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [data, setData] = useState("");
-  // const docRef = doc(db, "feedback", currentUser["uid"]);
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState(null);
   const docRef = doc(db, "users", currentUser["uid"]);
+//  console.log("hai",currentUser)
   useEffect(() => {
     const getUserData = async () => {
-      const data = await getDoc(docRef);
-      setUserData(data.data());
+      try {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
     getUserData();
-  }, []);
+  }, [docRef]);
 
   function signout() {
     signOut(auth)
@@ -48,24 +53,35 @@ function UserNav() {
           <Navbar.Brand href="#home">Diet</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-              {userData.role==="user" ? (
+            <Nav className="me-auto">
+              {userData && (
                 <>
-                  <Nav.Link href="/customer">Home</Nav.Link>
-                  <Nav.Link href="/exercises">Exercises</Nav.Link>
-                  <Nav.Link href="/cookedfood">Cooked Food</Nav.Link>
-                  <Nav.Link href="/rawfood">Raw Food</Nav.Link>
-                  <Nav.Link href="/addfeedback">Feedback</Nav.Link>
-                  </>
-              ) :   (
-              <>
-                
-                  <Nav.Link href="/customer">Home</Nav.Link>
-                <Nav.Link href="/viewfeedback">Feedback</Nav.Link>
+                  {userData.role === "user" && (
+                    <>
+                      <Nav.Link href="/customer">Home</Nav.Link>
+                      <Nav.Link href="/exercises">Exercises</Nav.Link>
+                      <Nav.Link href="/cookedfood">Cooked Food</Nav.Link>
+                      <Nav.Link href="/rawfood">Raw Food</Nav.Link>
+                      <Nav.Link href="/addfeedback">Feedback</Nav.Link>
+                      <Nav.Link href="/userchat">Chat</Nav.Link>
+                    </>
+                  )}
+                  {userData.role === "supervisor" && (
+                    <>
+                      
+                      <Nav.Link href="/viewfeedback">Feedback</Nav.Link>
+                    </>
+                  )}
+                  {userData.role !== "user" && userData.role !== "supervisor" && (
+                    <>
+                      <Nav.Link href="/experthome">Home</Nav.Link>
+                      {/* <Nav.Link href="/requests">Requests</Nav.Link> */}
+                      <Nav.Link href="/expertChat">Chat</Nav.Link>
+                    </>
+                  )}
                 </>
-                
               )}
-           </Nav>
+            </Nav>
             <Nav>
               <NavDropdown title="Account" id="collapsible-nav-dropdown">
                 <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>

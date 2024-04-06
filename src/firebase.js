@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 
 import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
@@ -13,13 +13,12 @@ require('firebase/auth');
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const app = firebase.initializeApp({
-  apiKey: "AIzaSyD0nMiU5K7xp6DDSSs1MF0PVhaiuz4WrMo",
-  authDomain: "diet-b5916.firebaseapp.com",
-  projectId: "diet-b5916",
-  storageBucket: "diet-b5916.appspot.com",
-  messagingSenderId: "1039485109698",
-  appId: "1:1039485109698:web:ffa5cb24bacce5a0e9825b",
-  measurementId: "G-DGBVC9N9DP"
+  apiKey: "AIzaSyCDQ6SX3NNQnV2fx94whl0fkF15-OZodOU",
+  authDomain: "dietplan-c51dc.firebaseapp.com",
+  projectId: "dietplan-c51dc",
+  storageBucket: "dietplan-c51dc.appspot.com",
+  messagingSenderId: "149096768931",
+  appId: "1:149096768931:web:7bcf648934f35dbf7ca616"
 })
 
 export default app;

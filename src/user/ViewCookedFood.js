@@ -2,13 +2,13 @@ import React, { useState ,useEffect} from "react";
 import YouTube from "react-youtube";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import UserNav from "./UserNav";
+import UserNav from "../components/UserNav";
 import { Card } from "react-bootstrap";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 function ViewCookedFood() {
-  const [rawFood, setRawFood] = useState([]);// Replace with your YouTube video ID
+  const [cookedFood, setCookedFood] = useState([]);// Replace with your YouTube video ID
 
   const opts = {
     height: "400",
@@ -18,25 +18,25 @@ function ViewCookedFood() {
     // },
   };
   useEffect(() => {
-    const getRawFoodData = async () => {
-      const q = query(collection(db, "rawfood"));
+    const getCookedFoodData = async () => {
+      const q = query(collection(db, "cookedfood"));
       const querySnapshot = await getDocs(q);
       const userData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setRawFood(userData);
+      setCookedFood(userData);
     };
 
-    getRawFoodData();
+    getCookedFoodData();
   }, []);
 
   return (
     <>
       <UserNav />
-      <h1 className="text-center mb-10">View Raw Food</h1>
+      <h1 className="text-center mb-10">View Cooked Food</h1>
       <Row>
-      {rawFood.map((food) => (
+      {cookedFood.map((food) => (
       <Card style={{width:400,height: 500,margin:30}}>
         <Col style={{ marginLeft:-12}}>
         
@@ -46,7 +46,7 @@ function ViewCookedFood() {
             </div>
             </Col>
               <Col style={{ marginTop: 200 }}>
-              <h3>{food.rawFoodName}</h3>
+              <h3>{food.cookedFoodName}</h3>
               <p>{food.ingredients}</p>
          
         </Col>

@@ -1,6 +1,6 @@
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import UserNav from "./UserNav";
+import UserNav from "../components/UserNav";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";

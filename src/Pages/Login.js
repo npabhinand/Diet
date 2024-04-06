@@ -9,7 +9,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { query, getDocs, where, collection } from "firebase/firestore"; // Updated import
 import { db } from "../firebase";
 import { auth } from "../firebase";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth_context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,11 +56,16 @@ function Login() {
         navigate("/admin");
         notify("👍 Login successful!");
       } 
-      // else if (userData && userData.role === "supervisor") {
-      //   dispatch({ type: "LOGIN", payload: user });
-      //   notify("👍 Login successful!");
-      //   navigate("/supervisor");
-      // } 
+      else if (userData && userData.role === "supervisor") {
+        dispatch({ type: "LOGIN", payload: user });
+        notify("👍 Login successful!");
+        navigate("/viewfeedback");
+      } 
+      else if (userData && userData.role === "expert") {
+        dispatch({ type: "LOGIN", payload: user });
+        notify("👍 Login successful!");
+        navigate("/experthome");
+      } 
       else {
         dispatch({ type: "LOGIN", payload: user });
         notify("👍 Login successful!");

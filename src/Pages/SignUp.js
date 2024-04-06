@@ -1,71 +1,58 @@
-// import { v4 as uuid } from "uuid";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { auth } from "../firebase";
+import Navbar1 from "../components/Navbar1";
+import { Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Image } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Navbar1 from "../components/Navbar1";
-import { db } from "../firebase";
-import { setDoc, doc } from "firebase/firestore";
-import React, { useContext, useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { auth } from "../firebase";
-import { AuthContext } from "../context/auth_context";
-import { useNavigate } from "react-router-dom";
 
 const SignUp = ({ inputs }) => {
-  const [data, setData] = useState({});
-  // const [error, setError] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
-
-  const { currentUser } = useContext(AuthContext);
+  const [role, setRole] = useState("user"); // State to hold the selected role
   const navigate = useNavigate();
-
-  const handleInput = (e) => {
-    const id = e.target.id;
-    const value = e.target.value;
-
-    setData({ ...data, [id]: value });
-
-    console.log(data);
-  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        setDoc(doc(db, "users", user.uid), {
-          email: email,
-          ...data,
-          phone: phone,
-          name: name,
-          role: "user",
-        });
-        toast("🦄 Successfully created account!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        navigate("/login");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Set the role based on the selected radio button
+      const userData = {
+        email: email,
+        phone: phone,
+        name: name,
+        role: role, // Set the role value here
+      };
+
+      // Store user data to Firestore
+      await setDoc(doc(db, "users", user.uid), userData);
+
+      toast("🦄 Successfully created account!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -96,6 +83,27 @@ const SignUp = ({ inputs }) => {
           }}
         >
           <h1 className="text-center mb-4">Sign Up</h1>
+
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', fontWeight: '500', margin: 10}}>
+            <Form.Check
+              type="radio"
+              aria-label="radio 1"
+              onChange={() => setRole("expert")} 
+              checked={role === "expert"}
+              style={{marginRight:5}} 
+            />
+            Expert
+            <Form.Check
+              type="radio"
+              aria-label="radio 2"
+              style={{ marginLeft: 20 ,marginRight:5}}
+              onChange={() => setRole("user")} 
+              checked={role === "user"} 
+              
+            />
+            User
+          </div>
+
           <FloatingLabel
             controlId="floatingInput"
             label="Name"
@@ -158,7 +166,6 @@ const SignUp = ({ inputs }) => {
             </Button>
           </div>
           <a
-            href="#"
             style={{ alignItems: "center", textAlign: "center", marginTop: 10 }}
           >
             <Link to={"/login"}>Need to login ?</Link>
